@@ -46,9 +46,16 @@ public class Proof {
 						if (i != j) {
 							if (this.getProof().get(i).getPremise().getStatement().equals(this.getProof().get(j).getStatement())) {
 								ArrayList<Line> references = new ArrayList<Line>();
-								references.add(this.getProof().get(i));
-								references.add(this.getProof().get(j));
-								this.addLine(this.getProof().get(i).getConsequent().getStatement(),"MP",references);
+								ArrayList<String> referr = new ArrayList<String>();
+								for (int a = 0; a < this.getProof().size(); a++) {
+									if ((this.getProof().get(i) == this.getProof().get(a)) || (this.getProof().get(j) == this.getProof().get(a))) {
+//										System.out.println("ayyy " + a);
+										referr.add("" + a);
+									}
+								}
+//								references.add(this.getProof().get(i));
+//								references.add(this.getProof().get(j));
+								this.addLine(this.getProof().get(i).getConsequent().getStatement(),"MP",referr);
 							}
 						}
 					}
@@ -58,7 +65,7 @@ public class Proof {
 	}
 	
 	// function responsible for adding a line with rules
-	public void addLine(String s, String rule, ArrayList<Line> references) {
+	public void addLine(String s, String rule, ArrayList<String> references) {
 		// exit function if line will be a duplicate
 		for (int i = 0; i < this.getProof().size(); i++) {
 			if (this.getProof().get(i).getStatement().equals(s)) {
@@ -66,9 +73,9 @@ public class Proof {
 				return; // exit function as to not add line
 			}
 		}
-		System.out.println("adding a proof while size " + this.getProof().size());
+//		System.out.println("adding a proof while size " + this.getProof().size());
 		Line n = new Line(s, this.proof.size(), rule, references);
-		System.out.println(n.getLineNumber());
+//		System.out.println(n.getLineNumber());
 		this.proof.add(n);
 	}
 
@@ -94,10 +101,11 @@ public class Proof {
 	
 	// output string
 	public String toString() {
-		String r = "";
+		String r = "-- FORMAL PROOF --\n";
 		for (int i = 0; i < this.getProof().size(); i++) {
 			r += i + ". " + this.getProof().get(i).getFormalLine() + "\n";
 		}
+		r += "-- END OF PROOF --";
 		return r;
 	}
 

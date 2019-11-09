@@ -10,11 +10,11 @@ public class Line {
 	private Line premise;
 	private Line consequent;
 	private String rule;
-	private ArrayList<Line> references;
+	private ArrayList<String> references;
 	
 	public Line(String s, int ln) {
 		this.setLineNumber(ln);
-		this.setReferences(new ArrayList<Line>());
+		this.setReferences(new ArrayList<String>());
 		this.setStatement(s);
 		this.setRule(null);
 		this.setOperator(null);
@@ -23,7 +23,7 @@ public class Line {
 		this.constructFragments();
 	}
 	
-	public Line(String s, int ln, String rule, ArrayList<Line> references) {
+	public Line(String s, int ln, String rule, ArrayList<String> references) {
 		this.setLineNumber(ln);
 		this.setReferences(references);
 		this.setStatement(s);
@@ -80,9 +80,9 @@ public class Line {
 		if (wasGenerated()) {
 			r += "        " + this.getRule() + " ";
 			for (int i = 0; i < this.getReferences().size(); i++) {
-				System.out.println(this.getReferences().get(i));
-				System.out.println(this.getReferences().get(i).getLineNumber());
-				r += this.getReferences().get(i).getLineNumber();
+				
+				System.out.println(this.getReferences().get(i)); //.getLineNumber()
+				r += this.getReferences().get(i); //.getLineNumber()
 				if (i != this.getReferences().size()-1) {
 					r += ",";
 				}
@@ -147,11 +147,11 @@ public class Line {
 		return r;		
 	}
 
-	public ArrayList<Line> getReferences() {
+	public ArrayList<String> getReferences() {
 		return references;
 	}
 
-	public void setReferences(ArrayList<Line> references) {
+	public void setReferences(ArrayList<String> references) {
 		this.references = references;
 	}
 
