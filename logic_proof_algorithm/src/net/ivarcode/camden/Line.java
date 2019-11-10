@@ -12,6 +12,7 @@ public class Line {
 	private String rule;
 	private ArrayList<String> references;
 	
+	// Constructor
 	public Line(String s, int ln) {
 		this.setLineNumber(ln);
 		this.setReferences(new ArrayList<String>());
@@ -23,6 +24,7 @@ public class Line {
 		this.constructFragments();
 	}
 	
+	// Constructor 
 	public Line(String s, int ln, String rule, ArrayList<String> references) {
 		this.setLineNumber(ln);
 		this.setReferences(references);
@@ -33,9 +35,11 @@ public class Line {
 		this.setConsequent(null);
 		this.constructFragments();
 	}
-	
+	// function that parses the proof statements into variables and operators 
 	public void constructFragments() {
+		// Grabs the statement the user passes in (proof)
 		String s = this.getStatement();
+		// checks if it is a simple statement and does not need to be spliced 
 		if (s.length() == 1) {
 //			System.out.println("length is one, variable only, no further construction");
 		} else {
@@ -53,6 +57,7 @@ public class Line {
 				}
 				// implication operator '->'
 				if (s.charAt(i) == '-') {
+					// sets the operators, premises and consequent to the value the user imputs
 					if (counter == 0) {
 						end = i;
 						this.setPremise(new Line(this.trimParenthesis(s.substring(start,end)),0));
@@ -67,14 +72,14 @@ public class Line {
 			}
 		}
 	}
-	
+	//function that takes the parenthesis out of the user imputed statement 
 	public String trimParenthesis(String s) {
 		if (s.charAt(0) == '(' && s.charAt(s.length()-1) == ')') {
 			return s.substring(1,s.length()-1);
 		}
 		return s;
 	}
-
+	// function that formats the output into a formal proof
 	public String getFormalLine() {
 		String r = this.getStatement();
 		if (wasGenerated()) {
@@ -90,11 +95,12 @@ public class Line {
 		}
 		return r;
 	}
-	
+	// function that gets the users statement without the parenthesis 
 	public String getStatement() {
 		return this.trimParenthesis(statement);
 	}
-
+	
+	// function that sets the statement equal to what is being passed in 
 	public void setStatement(String statement) {
 		this.statement = statement;
 	}
@@ -112,30 +118,37 @@ public class Line {
 		return this.getOperator() != null;
 	}
 	
+	// function that gets the operator 
 	public String getOperator() {
 		return operator;
 	}
 
+	// function that sets the operator equal to whatever is passed in 
 	public void setOperator(String operator) {
 		this.operator = operator;
 	}
 
+	// function that gets the premise
 	public Line getPremise() {
 		return premise;
 	}
-
+	
+	// function that sets the premise equal to whatever is passed in 
 	public void setPremise(Line premise) {
 		this.premise = premise;
 	}
 
+	// function that gets the consequent 
 	public Line getConsequent() {
 		return consequent;
 	}
 
+	// function that sets the consequent to whatever is passed in 
 	public void setConsequent(Line consequent) {
 		this.consequent = consequent;
 	}
 	
+	// function that overrides what prints out and prints the line information 
 	public String toString() {
 		String r = "line: " + this.getStatement();
 		if (this.getOperator() != null) {
@@ -147,26 +160,32 @@ public class Line {
 		return r;		
 	}
 
+	// function that gets the references 
 	public ArrayList<String> getReferences() {
 		return references;
 	}
 
+	// function that sets the references 
 	public void setReferences(ArrayList<String> references) {
 		this.references = references;
 	}
 
+	// function that gets the rule 
 	public String getRule() {
 		return rule;
 	}
 
+	// function that sets the rule 
 	public void setRule(String rule) {
 		this.rule = rule;
 	}
-
+	
+	// function that gets the line number 
 	public int getLineNumber() {
 		return lineNumber;
 	}
 
+	// function sets the line number 
 	public void setLineNumber(int lineNumber) {
 		this.lineNumber = lineNumber;
 	}
