@@ -11,14 +11,21 @@ public class TestCases {
 		proof.loadPremises("A,A->B,A->C,A->D,A->Z");
 		proof.setConsequent(new Line("B", 0));
 		
-		System.out.println(proof.getLine(0));
-		System.out.println(proof.getLine(1));
+		//System.out.println(proof.getLine(0));
+		//System.out.println(proof.getLine(1));
 		
 //		Proof pe = new Proof("A,A->B", "B");
 		
-		System.out.println(proof);
+		//System.out.println(proof);
+		
+		// prove recursively until exhausted options
 		
 		proof.prove();
+//		int a = 1;//start
+//		while (a != 0) {
+//			a = proof.prove();
+//			System.out.println("full pass :: " + a);
+//		}
 
 		System.out.println(proof);
 		

@@ -36,7 +36,9 @@ public class Proof {
 	}
 	
 	// function responsible for evaluating the proof
-	public void prove() {
+	// returns number of inserted lines
+	public int prove() {
+		int til = 0;
 		for (int i = 0; i < this.getProof().size(); i++) {
 			if (this.getProof().get(i).hasOperator()) {
 				// implication
@@ -55,13 +57,30 @@ public class Proof {
 								}
 //								references.add(this.getProof().get(i));
 //								references.add(this.getProof().get(j));
-								this.addLine(this.getProof().get(i).getConsequent().getStatement(),"MP",referr);
+								String line_to_add = this.getProof().get(i).getConsequent().getStatement();
+								for (int k = 0; k < this.getProof().size(); k++) {
+									
+								}
+								this.addLine(line_to_add,"MP",referr);
+								til++;
 							}
+						}
+					}
+					// modus tollens
+					// TODO
+				}
+				// ambersand (&)?
+				if (this.getProof().get(i).getOperator().equals("&")) {
+					// simplification
+					for (int j = 0; j < this.getProof().size(); j++) {
+						if (i != j) {
+							//TODO
 						}
 					}
 				}
 			}
 		}
+		return til;
 	}
 	
 	// function responsible for adding a line with rules
