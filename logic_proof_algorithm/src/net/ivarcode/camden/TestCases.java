@@ -8,7 +8,7 @@ public class TestCases {
 	
 	public static void main(String[] args) {
 		Proof proof = new Proof();
-		proof.loadPremises("A,A->B,A->C,A->D,A->Z");
+		proof.loadPremises("~B,A->B");
 		proof.setConsequent(new Line("B", 0));
 		
 		//System.out.println(proof.getLine(0));
