@@ -72,7 +72,33 @@ public class Proof {
 						}
 					}
 					// modus tollens
-					
+					for (int j = 0; j < this.getProof().size(); j++) {
+						if (i != j) {
+							String result = this.modusTollens(this.getProof().get(i), this.getProof().get(j));
+							if (result != null) {
+								ArrayList<String> ref = new ArrayList<String>();
+								for (int a = 0; a < this.getProof().size(); a++) {
+									if ((this.getProof().get(i) == this.getProof().get(a)) || (this.getProof().get(j) == this.getProof().get(a))) {
+//										System.out.println("ayyy " + a);
+										ref.add("" + a);
+									}
+									
+								}
+								boolean dont_add = false;
+								
+								for (int k = 0; k < this.getProof().size(); k++) {
+									if (this.getProof().get(k).getStatement().equals(result)) {
+										dont_add = true;
+									}
+								}
+								if (!dont_add) {
+									this.addLine(result,"MT",ref);
+									til++;
+								}
+							}
+								
+						}
+					}
 				}
 				// ambersand (&)?
 				if (this.getProof().get(i).getOperator().equals("&")) {
@@ -129,6 +155,13 @@ public class Proof {
 	// returns the addition of a tilda on any statement
 	public String not(String str) {
 		return "~" + str;
+	}
+	
+	public String modusTollens(Line a, Line b) {
+		if (this.not(a.getConsequent().getStatement()).equals(b.getStatement())) {
+			return this.not(a.getPremise().getStatement());
+		}
+		return null;
 	}
 	
 	// function responsible for adding a line with rules
