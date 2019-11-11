@@ -49,7 +49,7 @@ public class Proof {
 							// i is A j is B
 							String result = this.modusPonens(this.getProof().get(i), this.getProof().get(j));
 							if (result != null) {
-								ArrayList<Line> references = new ArrayList<Line>();
+//								ArrayList<Line> references = new ArrayList<Line>();
 								ArrayList<String> referr = new ArrayList<String>();
 								for (int a = 0; a < this.getProof().size(); a++) {
 									if ((this.getProof().get(i) == this.getProof().get(a)) || (this.getProof().get(j) == this.getProof().get(a))) {
