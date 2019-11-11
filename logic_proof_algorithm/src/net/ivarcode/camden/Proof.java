@@ -57,13 +57,8 @@ public class Proof {
 										referr.add("" + a);
 									}
 								}
-								boolean dont_add = false;
+								boolean dont_add = this.lineAlreadyExists(result);
 								
-								for (int k = 0; k < this.getProof().size(); k++) {
-									if (this.getProof().get(k).getStatement().equals(result)) {
-										dont_add = true;
-									}
-								}
 								if (!dont_add) {
 									this.addLine(result,"MP",referr);
 									til++;
@@ -84,13 +79,7 @@ public class Proof {
 									}
 									
 								}
-								boolean dont_add = false;
-								
-								for (int k = 0; k < this.getProof().size(); k++) {
-									if (this.getProof().get(k).getStatement().equals(result)) {
-										dont_add = true;
-									}
-								}
+								boolean dont_add = this.lineAlreadyExists(result);
 								if (!dont_add) {
 									this.addLine(result,"MT",ref);
 									til++;
@@ -110,6 +99,16 @@ public class Proof {
 		return til;
 	}
 	
+	// returns if the line already exists in the proof
+	public boolean lineAlreadyExists(String s) {
+		for (int k = 0; k < this.getProof().size(); k++) {
+			if (this.getProof().get(k).getStatement().equals(s)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	// simplification function returns number of inserted lines
 	public int simplify(Line line) {
 		ArrayList<String> referr = new ArrayList<String>();
@@ -120,22 +119,12 @@ public class Proof {
 			}
 		}
 		int til = 0;
-		boolean dont_add = false;
-		for (int k = 0; k < this.getProof().size(); k++) {
-			if (this.getProof().get(k).getStatement().equals(line.getPremise().getStatement())) {
-				dont_add = true;
-			}
-		}
+		boolean dont_add = this.lineAlreadyExists(line.getPremise().getStatement());
 		if (!dont_add) {
 			this.addLine(line.getPremise().getStatement(),"simplification",referr);
 			til++;
 		}
-		dont_add = false;
-		for (int k = 0; k < this.getProof().size(); k++) {
-			if (this.getProof().get(k).getStatement().equals(line.getConsequent().getStatement())) {
-				dont_add = true;
-			}
-		}
+		dont_add = this.lineAlreadyExists(line.getConsequent().getStatement());
 		if (!dont_add) {
 			this.addLine(line.getConsequent().getStatement(),"simplification",referr);
 			til++;

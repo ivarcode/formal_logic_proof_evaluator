@@ -8,8 +8,8 @@ public class TestCases {
 	
 	public static void main(String[] args) {
 		Proof proof = new Proof();
-		proof.loadPremises("A,A->B,C&D");
-		proof.setConsequent(new Line("B", 0));
+		proof.loadPremises("E->(A&C),A->(F&E),E");
+		proof.setConsequent(new Line("F", 0));
 		
 		//System.out.println(proof.getLine(0));
 		//System.out.println(proof.getLine(1));
@@ -28,12 +28,6 @@ public class TestCases {
 		}
 
 		System.out.println(proof);
-		
-		
-		
-		
-		
-		
 		
 		
 		
