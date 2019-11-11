@@ -57,40 +57,22 @@ public class Proof {
 								}
 //								references.add(this.getProof().get(i));
 //								references.add(this.getProof().get(j));
+								boolean dont_add = false;
 								String line_to_add = this.getProof().get(i).getConsequent().getStatement();
 								for (int k = 0; k < this.getProof().size(); k++) {
-									
+									if (this.getProof().get(k).getStatement().equals(line_to_add)) {
+										dont_add = true;
+									}
 								}
-								this.addLine(line_to_add,"MP",referr);
-								til++;
+								if (!dont_add) {
+									this.addLine(line_to_add,"MP",referr);
+									til++;
+								}
 							}
 						}
 					}
 					// modus tollens
-					for (int j = 0; j < this.getProof().size(); j++) {
-						if (i != j) {
-							System.out.println(this.getProof().get(j).getStatement());
-							System.out.println(this.not(this.getProof().get(i).getConsequent().getStatement()));
-							if (this.not(this.getProof().get(i).getConsequent().getStatement()).equals(this.getProof().get(j).getStatement())) {
-								ArrayList<Line> references = new ArrayList<Line>();
-								ArrayList<String> referr = new ArrayList<String>();
-								for (int a = 0; a < this.getProof().size(); a++) {
-									if ((this.getProof().get(i) == this.getProof().get(a)) || (this.getProof().get(j) == this.getProof().get(a))) {
-//										System.out.println("ayyy " + a);
-										referr.add("" + a);
-									}
-								}
-//								references.add(this.getProof().get(i));
-//								references.add(this.getProof().get(j));
-								String line_to_add = this.not(this.getProof().get(i).getPremise().getStatement());
-								for (int k = 0; k < this.getProof().size(); k++) {
-									
-								}
-								this.addLine(line_to_add,"MT",referr);
-								til++;
-							}
-						}
-					}
+					
 				}
 				// ambersand (&)?
 				if (this.getProof().get(i).getOperator().equals("&")) {
