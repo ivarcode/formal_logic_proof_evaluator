@@ -46,7 +46,9 @@ public class Proof {
 					// modus ponens
 					for (int j = 0; j < this.getProof().size(); j++) {
 						if (i != j) {
-							if (this.getProof().get(i).getPremise().getStatement().equals(this.getProof().get(j).getStatement())) {
+							// i is A j is B
+							String result = this.modusPonens(this.getProof().get(i), this.getProof().get(j));
+							if (result != null) {
 								ArrayList<Line> references = new ArrayList<Line>();
 								ArrayList<String> referr = new ArrayList<String>();
 								for (int a = 0; a < this.getProof().size(); a++) {
@@ -55,20 +57,20 @@ public class Proof {
 										referr.add("" + a);
 									}
 								}
-//								references.add(this.getProof().get(i));
-//								references.add(this.getProof().get(j));
 								boolean dont_add = false;
-								String line_to_add = this.getProof().get(i).getConsequent().getStatement();
+								
 								for (int k = 0; k < this.getProof().size(); k++) {
-									if (this.getProof().get(k).getStatement().equals(line_to_add)) {
+									if (this.getProof().get(k).getStatement().equals(result)) {
 										dont_add = true;
 									}
 								}
 								if (!dont_add) {
-									this.addLine(line_to_add,"MP",referr);
+									this.addLine(result,"MP",referr);
 									til++;
 								}
 							}
+							
+							
 						}
 					}
 					// modus tollens
@@ -86,6 +88,15 @@ public class Proof {
 			}
 		}
 		return til;
+	}
+	
+	// modus ponens function returns if there is a modus ponens relationship
+	// between a and b and returns the resulting line statement if so
+	public String modusPonens(Line a, Line b) {
+		if (a.getPremise().getStatement().equals(b.getStatement())) {
+			return a.getConsequent().getStatement();
+		}
+		return null;
 	}
 	
 	// returns the addition of a tilda on any statement
