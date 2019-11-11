@@ -80,6 +80,18 @@ public class Line {
 						counter--;
 					}
 				}
+				// or operator 'v'
+				if (s.charAt(i) == 'v') {
+					if (counter == 0) {
+						end = i;
+						this.setPremise(new Line(this.trimParenthesis(s.substring(start,end)),0));
+						this.setOperator(s.substring(end,end + 1));
+						this.setConsequent(new Line(this.trimParenthesis(s.substring(end + 1, s.length())),0));
+						break;
+					} else {
+						counter--;
+					}
+				}
 				i++;
 			}
 		}

@@ -94,6 +94,11 @@ public class Proof {
 					// simplification
 					til += this.simplify(this.getProof().get(i));
 				}
+				// or operator 'v'
+				if (this.getProof().get(i).getOperator().equals("v")) {
+					// DS rule
+					til += this.applyDSRule(this.getProof().get(i));
+				}
 			}
 		}
 		return til;
@@ -128,6 +133,45 @@ public class Proof {
 		if (!dont_add) {
 			this.addLine(line.getConsequent().getStatement(),"simplification",referr);
 			til++;
+		}
+		return til;
+	}
+	
+	// DS rule function returns number of inserted lines
+	public int applyDSRule(Line line) {
+		int til = 0;
+		ArrayList<String> ref = new ArrayList<String>();
+		for (int a = 0; a < this.getProof().size(); a++) {
+			if (this.getProof().get(a) == line) {
+				ref.add("" + a);
+			}
+		}
+		for (int a = 0; a < this.getProof().size(); a++) {
+			if (this.getProof().get(a).getStatement().equals(this.not(line.getPremise().getStatement()))) {
+				boolean dont_add = this.lineAlreadyExists(line.getConsequent().getStatement());
+				if (!dont_add) {
+					ref.add("" + a);
+					this.addLine(line.getConsequent().getStatement(), "DS", ref);
+					til++;
+				}
+			}
+		}
+		// reset ref
+		ref = new ArrayList<String>();
+		for (int a = 0; a < this.getProof().size(); a++) {
+			if (this.getProof().get(a) == line) {
+				ref.add("" + a);
+			}
+		}
+		for (int a = 0; a < this.getProof().size(); a++) {
+			if (this.getProof().get(a).getStatement().equals(this.not(line.getConsequent().getStatement()))) {
+				boolean dont_add = this.lineAlreadyExists(line.getPremise().getStatement());
+				if (!dont_add) {
+					ref.add("" + a);
+					this.addLine(line.getPremise().getStatement(), "DS", ref);
+					til++;
+				}
+			}
 		}
 		return til;
 	}
