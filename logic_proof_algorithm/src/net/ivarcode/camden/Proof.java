@@ -69,8 +69,6 @@ public class Proof {
 									til++;
 								}
 							}
-							
-							
 						}
 					}
 					// modus tollens
@@ -79,13 +77,42 @@ public class Proof {
 				// ambersand (&)?
 				if (this.getProof().get(i).getOperator().equals("&")) {
 					// simplification
-					for (int j = 0; j < this.getProof().size(); j++) {
-						if (i != j) {
-							//TODO
-						}
-					}
+					til += this.simplify(this.getProof().get(i));
 				}
 			}
+		}
+		return til;
+	}
+	
+	// simplification function returns number of inserted lines
+	public int simplify(Line line) {
+		ArrayList<String> referr = new ArrayList<String>();
+		for (int a = 0; a < this.getProof().size(); a++) {
+			if (this.getProof().get(a) == line) {
+//				System.out.println("ayyy " + a);
+				referr.add("" + a);
+			}
+		}
+		int til = 0;
+		boolean dont_add = false;
+		for (int k = 0; k < this.getProof().size(); k++) {
+			if (this.getProof().get(k).getStatement().equals(line.getPremise().getStatement())) {
+				dont_add = true;
+			}
+		}
+		if (!dont_add) {
+			this.addLine(line.getPremise().getStatement(),"simplification",referr);
+			til++;
+		}
+		dont_add = false;
+		for (int k = 0; k < this.getProof().size(); k++) {
+			if (this.getProof().get(k).getStatement().equals(line.getConsequent().getStatement())) {
+				dont_add = true;
+			}
+		}
+		if (!dont_add) {
+			this.addLine(line.getConsequent().getStatement(),"simplification",referr);
+			til++;
 		}
 		return til;
 	}
