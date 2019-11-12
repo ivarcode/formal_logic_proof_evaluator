@@ -46,7 +46,7 @@ public class Proof {
 					// modus ponens
 					for (int j = 0; j < this.getProof().size(); j++) {
 						if (i != j) {
-							// i is A j is B
+							// i is A // j is B
 							String result = this.modusPonens(this.getProof().get(i), this.getProof().get(j));
 							if (result != null) {
 //								ArrayList<Line> references = new ArrayList<Line>();
@@ -147,7 +147,7 @@ public class Proof {
 			}
 		}
 		for (int a = 0; a < this.getProof().size(); a++) {
-			if (this.getProof().get(a).getStatement().equals(this.not(line.getPremise().getStatement()))) {
+			if (this.isEquivalentTo(this.getProof().get(a).getStatement(), this.not(line.getPremise().getStatement()))) {
 				boolean dont_add = this.lineAlreadyExists(line.getConsequent().getStatement());
 				if (!dont_add) {
 					ref.add("" + a);
@@ -164,7 +164,7 @@ public class Proof {
 			}
 		}
 		for (int a = 0; a < this.getProof().size(); a++) {
-			if (this.getProof().get(a).getStatement().equals(this.not(line.getConsequent().getStatement()))) {
+			if (this.isEquivalentTo(this.getProof().get(a).getStatement(), this.not(line.getConsequent().getStatement()))) {
 				boolean dont_add = this.lineAlreadyExists(line.getPremise().getStatement());
 				if (!dont_add) {
 					ref.add("" + a);
@@ -176,10 +176,17 @@ public class Proof {
 		return til;
 	}
 	
+	// returns whether String are equivalent with or w/o parenthesis
+	public boolean isEquivalentTo(String a, String b) {
+//		System.out.println(a + "  .  " + b);
+		Line l = new Line("irrelevant line", 0);
+		return l.trimParenthesis(a).equals(l.trimParenthesis(b));
+	}
+	
 	// modus ponens function returns if there is a modus ponens relationship
 	// between a and b and returns the resulting line statement if so
 	public String modusPonens(Line a, Line b) {
-		if (a.getPremise().getStatement().equals(b.getStatement())) {
+		if (a.trimParenthesis(a.getPremise().getStatement()).equals(b.trimParenthesis(b.getStatement()))) {
 			return a.getConsequent().getStatement();
 		}
 		return null;
