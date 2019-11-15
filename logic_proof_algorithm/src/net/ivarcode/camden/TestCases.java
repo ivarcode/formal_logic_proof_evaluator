@@ -12,8 +12,8 @@ public class TestCases {
 //		proof.loadPremises("~(A&B),~F,(A&B)vF");
 //		proof.setConsequent(new Line("F", 0));
 		
-		Proof proof = new Proof("(AvB)->(CvD)","C");
-		System.out.println(proof.getLine(1));
+		Proof proof = new Proof("((AvB)->(CvD))->X","C");
+		System.out.println(proof.getLine(0));
 //		Proof proof = new Proof("A,A->B,A->(CvD),(CvD)->Z","B");
 		
 		//System.out.println(proof.getLine(0));
@@ -33,6 +33,12 @@ public class TestCases {
 		}
 
 		System.out.println(proof);
+		
+		
+		/// CAM ^
+		/// ENRICO v
+		
+		
 		
 		
 //		

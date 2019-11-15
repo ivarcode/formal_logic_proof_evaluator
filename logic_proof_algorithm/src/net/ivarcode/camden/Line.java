@@ -37,20 +37,20 @@ public class Line {
 	}
 	// function that parses the proof statements into variables and operators 
 	public void constructFragments() {
-		
 		// Grabs the statement the user passes in (proof)
 		String s = this.getStatement();
-		System.out.println("construct fragments on line : " + s);
+//		System.out.println("construct fragments on line : " + s);
 		// checks if it is a simple statement and does not need to be spliced 
 		if (s.length() == 1) {
-			System.out.println("length is one, variable only, no further construction");
+//			System.out.println("length is one, variable only, no further construction");
 		} else {
-			System.out.println("splicing statement into fragments and operator");
+//			System.out.println("splicing statement into fragments and operator");
 			int i = 0;
 			int start = 0;
 			int end;
 			int counter = 0;
 			while (i < s.length()) {
+//				System.out.println(s.charAt(i) + " " + counter);
 				if (s.charAt(i) == '(') {
 					counter++;
 				}
@@ -59,20 +59,18 @@ public class Line {
 				}
 				// implication operator '->'
 				if (s.charAt(i) == '-') {
-					System.out.println("implication" + counter);
+//					System.out.println("implication" + counter);
 					// sets the operators, premises and consequent to the value the user inputs
 					if (counter == 0) {
 						end = i;
 						String prms = this.trimParenthesis(s.substring(start,end));
 						String op = s.substring(end,end + 2);
 						String cnsq = this.trimParenthesis(s.substring(end + 2, s.length()));
-						System.out.println(prms + " " + op + " " + cnsq);
+//						System.out.println(prms + " " + op + " " + cnsq);
 						this.setPremise(new Line(prms,0));
 						this.setOperator(op);
 						this.setConsequent(new Line(cnsq,0));
 						break;
-					} else {
-						counter--;
 					}
 				}
 				// ambersand '&'
@@ -83,8 +81,6 @@ public class Line {
 						this.setOperator(s.substring(end,end + 1));
 						this.setConsequent(new Line(this.trimParenthesis(s.substring(end + 1, s.length())),0));
 						break;
-					} else {
-						counter--;
 					}
 				}
 				// or operator 'v'
@@ -95,8 +91,6 @@ public class Line {
 						this.setOperator(s.substring(end,end + 1));
 						this.setConsequent(new Line(this.trimParenthesis(s.substring(end + 1, s.length())),0));
 						break;
-					} else {
-						counter--;
 					}
 				}
 				i++;
