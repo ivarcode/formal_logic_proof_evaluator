@@ -94,6 +94,9 @@ public class Proof {
 					// simplification
 					til += this.simplify(this.getProof().get(i));
 				}
+				if (this.getProof().get(i).getOperator().equals("<->")) {
+					til += this.biconditionalExit(this.getProof().get(i));
+				}
 				// or operator 'v'
 				if (this.getProof().get(i).getOperator().equals("v")) {
 					// DS rule
@@ -136,6 +139,28 @@ public class Proof {
 		}
 		return til;
 	}
+	
+	public int biconditionalExit(Line line) {
+		ArrayList<String> reff = new ArrayList<String>();
+		for (int b = 0; b < this.getProof().size(); b++) {
+			if (this.getProof().get(b) == line) {
+				reff.add("" + b);
+			}
+		}
+		int til = 0;
+		boolean dont_add = this.lineAlreadyExists(line.getPremise().getStatement());
+		if (!dont_add) {
+			this.addLine(line.getPremise().getStatement(),"biconditional exit",reff);
+			til++;
+		}
+		dont_add = this.lineAlreadyExists(line.getConsequent().getStatement());
+		if (!dont_add) {
+			this.addLine(line.getConsequent().getStatement(),"biconditional exit",reff);
+			til++;
+		}
+		return til;
+	}
+	
 	
 	// DS rule function returns number of inserted lines
 	public int applyDSRule(Line line) {
