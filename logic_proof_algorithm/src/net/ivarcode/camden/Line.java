@@ -37,11 +37,13 @@ public class Line {
 	}
 	// function that parses the proof statements into variables and operators 
 	public void constructFragments() {
+		
 		// Grabs the statement the user passes in (proof)
 		String s = this.getStatement();
+		System.out.println("construct fragments on line : " + s);
 		// checks if it is a simple statement and does not need to be spliced 
 		if (s.length() == 1) {
-//			System.out.println("length is one, variable only, no further construction");
+			System.out.println("length is one, variable only, no further construction");
 		} else {
 			System.out.println("splicing statement into fragments and operator");
 			int i = 0;
@@ -53,16 +55,21 @@ public class Line {
 					counter++;
 				}
 				if (s.charAt(i) == ')') {
-					counter++;
+					counter--;
 				}
 				// implication operator '->'
 				if (s.charAt(i) == '-') {
-					// sets the operators, premises and consequent to the value the user imputs
+					System.out.println("implication" + counter);
+					// sets the operators, premises and consequent to the value the user inputs
 					if (counter == 0) {
 						end = i;
-						this.setPremise(new Line(this.trimParenthesis(s.substring(start,end)),0));
-						this.setOperator(s.substring(end,end + 2));
-						this.setConsequent(new Line(this.trimParenthesis(s.substring(end + 2, s.length())),0));
+						String prms = this.trimParenthesis(s.substring(start,end));
+						String op = s.substring(end,end + 2);
+						String cnsq = this.trimParenthesis(s.substring(end + 2, s.length()));
+						System.out.println(prms + " " + op + " " + cnsq);
+						this.setPremise(new Line(prms,0));
+						this.setOperator(op);
+						this.setConsequent(new Line(cnsq,0));
 						break;
 					} else {
 						counter--;
@@ -95,6 +102,7 @@ public class Line {
 				i++;
 			}
 		}
+		System.out.println(this);
 	}
 	//function that takes the parenthesis out of the user imputed statement 
 	public String trimParenthesis(String s) {
@@ -103,6 +111,7 @@ public class Line {
 		}
 		return s;
 	}
+	
 	// function that formats the output into a formal proof
 	public String getFormalLine() {
 		String r = this.getStatement();
@@ -121,7 +130,7 @@ public class Line {
 	}
 	// function that gets the users statement without the parenthesis 
 	public String getStatement() {
-		return this.trimParenthesis(statement);
+		return this.statement;
 	}
 	
 	// function that sets the statement equal to what is being passed in 
