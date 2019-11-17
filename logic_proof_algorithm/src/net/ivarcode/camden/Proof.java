@@ -38,56 +38,19 @@ public class Proof {
 	// function responsible for evaluating the proof
 	// returns number of inserted lines
 	public int prove() {
+		// til = total inserted lines variable, keeps track of whether or 
+		// not the proof is still making progress
 		int til = 0;
 		for (int i = 0; i < this.getProof().size(); i++) {
+			// if the line contains an operator, we want to do something with it,
+			// depending on the operator
 			if (this.getProof().get(i).hasOperator()) {
 				// implication
 				if (this.getProof().get(i).getOperator().equals("->")) {
 					// modus ponens
-					for (int j = 0; j < this.getProof().size(); j++) {
-						if (i != j) {
-							// i is A // j is B
-							String result = this.modusPonens(this.getProof().get(i), this.getProof().get(j));
-							if (result != null) {
-//								ArrayList<Line> references = new ArrayList<Line>();
-								ArrayList<String> referr = new ArrayList<String>();
-								for (int a = 0; a < this.getProof().size(); a++) {
-									if ((this.getProof().get(i) == this.getProof().get(a)) || (this.getProof().get(j) == this.getProof().get(a))) {
-//										System.out.println("ayyy " + a);
-										referr.add("" + a);
-									}
-								}
-								boolean dont_add = this.lineAlreadyExists(result);
-								
-								if (!dont_add) {
-									this.addLine(result,"MP",referr);
-									til++;
-								}
-							}
-						}
-					}
+					til += this.modusPonens(this.getProof().get(i));
 					// modus tollens
-					for (int j = 0; j < this.getProof().size(); j++) {
-						if (i != j) {
-							String result = this.modusTollens(this.getProof().get(i), this.getProof().get(j));
-							if (result != null) {
-								ArrayList<String> ref = new ArrayList<String>();
-								for (int a = 0; a < this.getProof().size(); a++) {
-									if ((this.getProof().get(i) == this.getProof().get(a)) || (this.getProof().get(j) == this.getProof().get(a))) {
-//										System.out.println("ayyy " + a);
-										ref.add("" + a);
-									}
-									
-								}
-								boolean dont_add = this.lineAlreadyExists(result);
-								if (!dont_add) {
-									this.addLine(result,"MT",ref);
-									til++;
-								}
-							}
-								
-						}
-					}
+					til += this.modusTollens(this.getProof().get(i));
 				}
 				// ambersand (&)?
 				if (this.getProof().get(i).getOperator().equals("&")) {
@@ -119,13 +82,14 @@ public class Proof {
 	
 	// simplification function returns number of inserted lines
 	public int simplify(Line line) {
+		// finds the reference line to add to the proof
 		ArrayList<String> referr = new ArrayList<String>();
 		for (int a = 0; a < this.getProof().size(); a++) {
 			if (this.getProof().get(a) == line) {
-//				System.out.println("ayyy " + a);
 				referr.add("" + a);
 			}
 		}
+		// sets to 0 and then increments if line is added to proof
 		int til = 0;
 		boolean dont_add = this.lineAlreadyExists(line.getPremise().getStatement());
 		if (!dont_add) {
@@ -139,6 +103,36 @@ public class Proof {
 		}
 		return til;
 	}
+	
+	// modus ponens function returns the number of added lines based on the modus ponens rule
+	public int modusPonens(Line line) {
+		int til = 0;
+		for (int j = 0; j < this.getProof().size(); j++) {
+			// if != line
+			if (this.getProof().get(j) != line) {
+				// check if the premise of line is equivalent to proof.get(j)
+				if (line.getPremise().getStatement().equals(this.getProof().get(j).getStatement())) {
+					// if line doesn't already exist in proof, add it
+					if (!this.lineAlreadyExists(line.getConsequent().getStatement())) {
+						ArrayList<String> references = new ArrayList<String>();
+						// build references to include the working line
+						for (int a = 0; a < this.getProof().size(); a++) {
+							if (this.getProof().get(a) == line) {
+								references.add("" + a);
+							}
+						}
+						// add current line
+						references.add("" + j);
+						this.addLine(line.getConsequent().getStatement(), "MP", references);
+						til++; // increment one, added one line
+					}
+				}
+			}
+		}
+		return til; // return total inserted lines
+	}
+	
+	
 	
 	public int biconditionalExit(Line line) {
 		ArrayList<String> reff = new ArrayList<String>();
@@ -160,8 +154,7 @@ public class Proof {
 		}
 		return til;
 	}
-	
-	
+
 	// DS rule function returns number of inserted lines
 	public int applyDSRule(Line line) {
 		int til = 0;
@@ -208,25 +201,9 @@ public class Proof {
 		return l.trimParenthesis(a).equals(l.trimParenthesis(b));
 	}
 	
-	// modus ponens function returns if there is a modus ponens relationship
-	// between a and b and returns the resulting line statement if so
-	public String modusPonens(Line a, Line b) {
-		if (a.trimParenthesis(a.getPremise().getStatement()).equals(b.trimParenthesis(b.getStatement()))) {
-			return a.getConsequent().getStatement();
-		}
-		return null;
-	}
-	
 	// returns the addition of a tilda on any statement
 	public String not(String str) {
 		return "~" + str;
-	}
-	
-	public String modusTollens(Line a, Line b) {
-		if (this.not(a.getConsequent().getStatement()).equals(b.getStatement())) {
-			return this.not(a.getPremise().getStatement());
-		}
-		return null;
 	}
 	
 	// function responsible for adding a line with rules
