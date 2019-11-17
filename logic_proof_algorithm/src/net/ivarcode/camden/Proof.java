@@ -191,7 +191,7 @@ public class Proof {
 			}
 		}
 		for (int a = 0; a < this.getProof().size(); a++) {
-			if (this.isEquivalentTo(this.getProof().get(a).getStatement(), this.not(line.getPremise().getStatement()))) {
+			if (this.getProof().get(a).getStatement().equals(this.not(line.getPremise().getStatement()))) {
 				boolean dont_add = this.lineAlreadyExists(line.getConsequent().getStatement());
 				if (!dont_add) {
 					ref.add("" + a);
@@ -208,7 +208,7 @@ public class Proof {
 			}
 		}
 		for (int a = 0; a < this.getProof().size(); a++) {
-			if (this.isEquivalentTo(this.getProof().get(a).getStatement(), this.not(line.getConsequent().getStatement()))) {
+			if (this.getProof().get(a).getStatement().equals(this.not(line.getConsequent().getStatement()))) {
 				boolean dont_add = this.lineAlreadyExists(line.getPremise().getStatement());
 				if (!dont_add) {
 					ref.add("" + a);
@@ -218,13 +218,6 @@ public class Proof {
 			}
 		}
 		return til;
-	}
-	
-	// returns whether String are equivalent with or w/o parenthesis
-	public boolean isEquivalentTo(String a, String b) {
-//		System.out.println(a + "  .  " + b);
-		Line l = new Line("irrelevant line", 0);
-		return l.trimParenthesis(a).equals(l.trimParenthesis(b));
 	}
 	
 	// returns the addition of a tilda on any statement
