@@ -44,28 +44,8 @@ public class Proof {
 				// implication
 				if (this.getProof().get(i).getOperator().equals("->")) {
 					// modus ponens
-					for (int j = 0; j < this.getProof().size(); j++) {
-						if (i != j) {
-							// i is A // j is B
-							String result = this.modusPonens(this.getProof().get(i), this.getProof().get(j));
-							if (result != null) {
-//								ArrayList<Line> references = new ArrayList<Line>();
-								ArrayList<String> referr = new ArrayList<String>();
-								for (int a = 0; a < this.getProof().size(); a++) {
-									if ((this.getProof().get(i) == this.getProof().get(a)) || (this.getProof().get(j) == this.getProof().get(a))) {
-//										System.out.println("ayyy " + a);
-										referr.add("" + a);
-									}
-								}
-								boolean dont_add = this.lineAlreadyExists(result);
-								
-								if (!dont_add) {
-									this.addLine(result,"MP",referr);
-									til++;
-								}
-							}
-						}
-					}
+					til += this.modusPonens(this.getProof().get(i));
+					
 					// modus tollens
 					for (int j = 0; j < this.getProof().size(); j++) {
 						if (i != j) {
@@ -119,6 +99,7 @@ public class Proof {
 	
 	// simplification function returns number of inserted lines
 	public int simplify(Line line) {
+		// finds the reference line to add to the proof
 		ArrayList<String> referr = new ArrayList<String>();
 		for (int a = 0; a < this.getProof().size(); a++) {
 			if (this.getProof().get(a) == line) {
@@ -126,6 +107,7 @@ public class Proof {
 				referr.add("" + a);
 			}
 		}
+		// sets incrementer to 0 and then adds if line is added to proof
 		int til = 0;
 		boolean dont_add = this.lineAlreadyExists(line.getPremise().getStatement());
 		if (!dont_add) {
@@ -160,8 +142,7 @@ public class Proof {
 		}
 		return til;
 	}
-	
-	
+
 	// DS rule function returns number of inserted lines
 	public int applyDSRule(Line line) {
 		int til = 0;
@@ -210,11 +191,33 @@ public class Proof {
 	
 	// modus ponens function returns if there is a modus ponens relationship
 	// between a and b and returns the resulting line statement if so
-	public String modusPonens(Line a, Line b) {
-		if (a.trimParenthesis(a.getPremise().getStatement()).equals(b.trimParenthesis(b.getStatement()))) {
-			return a.getConsequent().getStatement();
+	public int modusPonens(Line line) {
+		
+		
+		
+		for (int j = 0; j < this.getProof().size(); j++) {
+			if (i != j) {
+				// i is A // j is B
+				String result = this.modusPonens(, this.getProof().get(j));
+				if (result != null) {
+//					ArrayList<Line> references = new ArrayList<Line>();
+					ArrayList<String> referr = new ArrayList<String>();
+					for (int a = 0; a < this.getProof().size(); a++) {
+						if ((this.getProof().get(i) == this.getProof().get(a)) || (this.getProof().get(j) == this.getProof().get(a))) {
+//							System.out.println("ayyy " + a);
+							referr.add("" + a);
+						}
+					}
+					boolean dont_add = this.lineAlreadyExists(result);
+					
+					if (!dont_add) {
+						this.addLine(result,"MP",referr);
+						til++;
+					}
+				}
+			}
 		}
-		return null;
+		
 	}
 	
 	// returns the addition of a tilda on any statement
