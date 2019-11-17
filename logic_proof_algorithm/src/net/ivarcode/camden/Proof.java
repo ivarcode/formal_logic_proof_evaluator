@@ -133,32 +133,32 @@ public class Proof {
 	}
 	
 	// modus tollens function returns the number of added lines based on the modus tollens rule
-		public int modusTollens(Line line) {
-			int til = 0;
-			for (int j = 0; j < this.getProof().size(); j++) {
-				// if != line
-				if (this.getProof().get(j) != line) {
-					// check if the premise of line is equivalent to proof.get(j)
-					if (this.not(line.getConsequent().getStatement()).equals(this.getProof().get(j).getStatement())) {
-						// if line doesn't already exist in proof, add it
-						if (!this.lineAlreadyExists(this.not(line.getPremise().getStatement()))) {
-							ArrayList<String> references = new ArrayList<String>();
-							// build references to include the working line
-							for (int a = 0; a < this.getProof().size(); a++) {
-								if (this.getProof().get(a) == line) {
-									references.add("" + a);
-								}
+	public int modusTollens(Line line) {
+		int til = 0;
+		for (int j = 0; j < this.getProof().size(); j++) {
+			// if != line
+			if (this.getProof().get(j) != line) {
+				// check if the premise of line is equivalent to proof.get(j)
+				if (this.not(line.getConsequent().getStatement()).equals(this.getProof().get(j).getStatement())) {
+					// if line doesn't already exist in proof, add it
+					if (!this.lineAlreadyExists(this.not(line.getPremise().getStatement()))) {
+						ArrayList<String> references = new ArrayList<String>();
+						// build references to include the working line
+						for (int a = 0; a < this.getProof().size(); a++) {
+							if (this.getProof().get(a) == line) {
+								references.add("" + a);
 							}
-							// add current line
-							references.add("" + j);
-							this.addLine(this.not(line.getPremise().getStatement()), "MT", references);
-							til++; // increment one, added one line
 						}
+						// add current line
+						references.add("" + j);
+						this.addLine(this.not(line.getPremise().getStatement()), "MT", references);
+						til++; // increment one, added one line
 					}
 				}
 			}
-			return til; // return total inserted lines
 		}
+		return til; // return total inserted lines
+	}
 	
 	public int biconditionalExit(Line line) {
 		ArrayList<String> reff = new ArrayList<String>();
