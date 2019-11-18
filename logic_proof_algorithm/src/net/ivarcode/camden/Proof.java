@@ -45,6 +45,8 @@ public class Proof {
 			// if the line contains an operator, we want to do something with it,
 			// depending on the operator
 			if (this.getProof().get(i).hasOperator()) {
+				// double negation
+				
 				// implication
 				if (this.getProof().get(i).getOperator().equals("->")) {
 					// modus ponens
@@ -66,10 +68,22 @@ public class Proof {
 					// DS rule
 					til += this.applyDSRule(this.getProof().get(i));
 				}
+			} else /*if there is no operator*/ {
+				// double negation
+				if (this.getProof().get(i).getStatement().charAt(0) != '~') {
+					// add double negation
+				} else /*if the 0th char is ~ */ {
+					if (this.getProof().get(i).getStatement().charAt(1) == '~') {
+						// reverse double negation
+						
+					}
+				}
 			}
 		}
 		return til;
 	}
+	
+	// doubleNegate adds two tildas to any individual variable
 	
 	// returns if the line already exists in the proof
 	public boolean lineAlreadyExists(String s) {
