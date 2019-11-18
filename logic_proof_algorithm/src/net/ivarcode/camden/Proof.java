@@ -57,6 +57,7 @@ public class Proof {
 					// simplification
 					til += this.simplify(this.getProof().get(i));
 				}
+				// biconditional
 				if (this.getProof().get(i).getOperator().equals("<->")) {
 					til += this.biconditionalExit(this.getProof().get(i));
 				}

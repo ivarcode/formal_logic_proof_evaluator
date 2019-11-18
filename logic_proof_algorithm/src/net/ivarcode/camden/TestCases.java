@@ -13,8 +13,8 @@ public class TestCases {
 //		proof.setConsequent(new Line("F", 0));
 		
 //		Proof proof = new Proof("A&B,~X,C->X","C");
-		Proof proof = new Proof("AvC,~A","C");
-		System.out.println(proof.getLine(0));
+		Proof proof = new Proof("G->(~O->(G->D)),OvG,~O","X");
+//		System.out.println(proof.getLine(0));
 //		Proof proof = new Proof("A,A->B,A->(CvD),(CvD)->Z","B");
 		
 		//System.out.println(proof.getLine(0));
@@ -30,7 +30,7 @@ public class TestCases {
 		int a = 1;//start
 		while (a != 0) {
 			a = proof.prove();
-			System.out.println("full pass :: " + a);
+//			System.out.println("full pass :: " + a);
 		}
 
 		System.out.println(proof);

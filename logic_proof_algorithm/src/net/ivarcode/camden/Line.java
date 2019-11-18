@@ -96,7 +96,7 @@ public class Line {
 				i++;
 			}
 		}
-		System.out.println(this);
+//		System.out.println(this);
 	}
 	//function that takes the parenthesis out of the user imputed statement 
 	public String trimParenthesis(String s) {
@@ -113,7 +113,7 @@ public class Line {
 			r += "        " + this.getRule() + " ";
 			for (int i = 0; i < this.getReferences().size(); i++) {
 				
-				System.out.println(this.getReferences().get(i)); //.getLineNumber()
+//				System.out.println(this.getReferences().get(i)); //.getLineNumber()
 				r += this.getReferences().get(i); //.getLineNumber()
 				if (i != this.getReferences().size()-1) {
 					r += ",";
