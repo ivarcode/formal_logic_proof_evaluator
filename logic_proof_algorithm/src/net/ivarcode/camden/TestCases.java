@@ -12,13 +12,14 @@ public class TestCases {
 //		proof.loadPremises("~(A&B),~F,(A&B)vF");
 //		proof.setConsequent(new Line("F", 0));
 		
+		Proof proof = new Proof("A&B,~~(BvC)");
 //		Proof proof = new Proof("A&B,~X,C->X","C");
-		Proof proof = new Proof("G->(~O->(G->D)),OvG,~O","X");
+//		Proof proof = new Proof("G->(~O->(G->D)),OvG,~O","X");
 //		System.out.println(proof.getLine(0));
 //		Proof proof = new Proof("A,A->B,A->(CvD),(CvD)->Z","B");
 		
-		//System.out.println(proof.getLine(0));
-		//System.out.println(proof.getLine(1));
+//		System.out.println(proof.getLine(0));
+//		System.out.println(proof.getLine(1));
 		
 //		Proof pe = new Proof("A,A->B", "B");
 		

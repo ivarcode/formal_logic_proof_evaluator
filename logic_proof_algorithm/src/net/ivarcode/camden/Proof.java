@@ -42,6 +42,16 @@ public class Proof {
 		// not the proof is still making progress
 		int til = 0;
 		for (int i = 0; i < this.getProof().size(); i++) {
+			// double negation
+			if (this.getProof().get(i).getStatement().charAt(0) != '~') {
+				// add double negation
+				til += this.doubleNegate(this.getProof().get(i));
+			} else /*if the 0th char is ~ */ {
+				if (this.getProof().get(i).getStatement().charAt(1) == '~') {
+					// reverse double negation
+					til += this.reverseDoubleNegate(this.getProof().get(i));
+				}
+			}
 			// if the line contains an operator, we want to do something with it,
 			// depending on the operator
 			if (this.getProof().get(i).hasOperator()) {
@@ -66,21 +76,60 @@ public class Proof {
 					// DS rule
 					til += this.applyDSRule(this.getProof().get(i));
 				}
+			} else /*if there is no operator*/ {
+				//TODO?
 			}
 		}
 		return til;
 	}
 	
-	// returns if the line already exists in the proof
-	public boolean lineAlreadyExists(String s) {
-		for (int k = 0; k < this.getProof().size(); k++) {
-			if (this.getProof().get(k).getStatement().equals(s)) {
-				return true;
+	// reverseDoubleNegate removes two tildas from any individual line
+	public int reverseDoubleNegate(Line line) {
+		// finds the reference line to add to the proof
+		ArrayList<String> referr = new ArrayList<String>();
+		for (int a = 0; a < this.getProof().size(); a++) {
+			if (this.getProof().get(a) == line) {
+				referr.add("" + a);
 			}
 		}
-		return false;
+		String l = line.getStatement();
+		// conditional to determine whether existing parenthesis need to be chopped
+		if (l.length() > 3) {
+			// remove parenthesis also
+			if (!this.lineAlreadyExists(l.substring(3,l.length()-1))) {
+				this.addLine(l.substring(3,l.length()-1),"DN",referr);
+				return 1;
+			}
+		} else {
+			if (!this.lineAlreadyExists(l.substring(2))) {
+				this.addLine(l.substring(2),"DN",referr);
+				return 1;
+			}
+		}
+		return 0;
 	}
 	
+	// doubleNegate adds two tildas to any individual variable
+	public int doubleNegate(Line line) {
+		// finds the reference line to add to the proof
+		ArrayList<String> referr = new ArrayList<String>();
+		for (int a = 0; a < this.getProof().size(); a++) {
+			if (this.getProof().get(a) == line) {
+				referr.add("" + a);
+			}
+		}
+		String l = line.getStatement();
+		if (line.hasOperator()) {
+			// add parenthesis
+			l = "(" + l + ")";
+		}
+		if (!this.lineAlreadyExists(this.not(this.not(l)))) {
+			this.addLine(this.not(this.not(l)),"DN",referr);
+			return 1;
+		}
+		return 0;
+	}
+		
 	// simplification function returns number of inserted lines
 	public int simplify(Line line) {
 		// finds the reference line to add to the proof
@@ -259,6 +308,16 @@ public class Proof {
 	// setter
 	public void setConsequent(Line consequent) {
 		this.consequent = consequent;
+	}
+	
+	// returns if the line already exists in the proof
+	public boolean lineAlreadyExists(String s) {
+		for (int k = 0; k < this.getProof().size(); k++) {
+			if (this.getProof().get(k).getStatement().equals(s)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	// output string
