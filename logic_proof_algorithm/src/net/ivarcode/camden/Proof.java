@@ -3,10 +3,16 @@ package net.ivarcode.camden;
 import java.util.ArrayList;
 
 public class Proof {
-	
+
+	// ----------------------------
+	// PROPERTIES
 	private ArrayList<Line> proof;
 	private Line consequent;
-	
+	// END PROPERTIES
+	// ----------------------------
+
+	// ----------------------------
+	// CONSTRUCTORS
 	// empty constructor
 	public Proof() {
 		this.proof = new ArrayList<Line>();
@@ -22,19 +28,9 @@ public class Proof {
 		this.loadPremises(premises);
 		this.setConsequent(new Line(consequent, 0));
 	}
-	
-	// builds the first few lines of the proof from the premises string
-	public void loadPremises(String premises) {
-		for (int i = 0; i < premises.length(); i++) {
-			int iter = i;
-			while (iter != premises.length() && premises.charAt(iter) != ',') {
-				iter++;
-			}
-			this.proof.add(new Line(premises.substring(i,iter), i));
-			i = iter;
-		}
-	}
-	
+	// END CONSTRUCTORS
+	// ----------------------------
+
 	// function responsible for evaluating the proof
 	// returns number of inserted lines
 	public int prove() {
@@ -82,54 +78,77 @@ public class Proof {
 		}
 		return til;
 	}
-	
-	// reverseDoubleNegate removes two tildas from any individual line
-	public int reverseDoubleNegate(Line line) {
-		// finds the reference line to add to the proof
-		ArrayList<String> referr = new ArrayList<String>();
-		for (int a = 0; a < this.getProof().size(); a++) {
-			if (this.getProof().get(a) == line) {
-				referr.add("" + a);
+
+	// ----------------------------
+	// HELPERS
+	// builds the first few lines of the proof from the premises string
+	public void loadPremises(String premises) {
+		for (int i = 0; i < premises.length(); i++) {
+			int iter = i;
+			while (iter != premises.length() && premises.charAt(iter) != ',') {
+				iter++;
 			}
+			this.proof.add(new Line(premises.substring(i,iter), i));
+			i = iter;
 		}
-		String l = line.getStatement();
-		// conditional to determine whether existing parenthesis need to be chopped
-		if (l.length() > 3) {
-			// remove parenthesis also
-			if (!this.lineAlreadyExists(l.substring(3,l.length()-1))) {
-				this.addLine(l.substring(3,l.length()-1),"DN",referr);
-				return 1;
-			}
-		} else {
-			if (!this.lineAlreadyExists(l.substring(2))) {
-				this.addLine(l.substring(2),"DN",referr);
-				return 1;
-			}
-		}
-		return 0;
 	}
-	
-	// doubleNegate adds two tildas to any individual variable
-	public int doubleNegate(Line line) {
-		// finds the reference line to add to the proof
-		ArrayList<String> referr = new ArrayList<String>();
-		for (int a = 0; a < this.getProof().size(); a++) {
-			if (this.getProof().get(a) == line) {
-				referr.add("" + a);
+	// returns the addition of a tilda on any statement
+	public String not(String str) {
+		return "~" + str;
+	}
+	// function responsible for adding a line with rules
+	public void addLine(String s, String rule, ArrayList<String> references) {
+		// exit function if line will be a duplicate
+		for (int i = 0; i < this.getProof().size(); i++) {
+			if (this.getProof().get(i).getStatement().equals(s)) {
+				System.out.println("this line already exists!");
+				return; // exit function as to not add line
 			}
 		}
-		String l = line.getStatement();
-		if (line.hasOperator()) {
-			// add parenthesis
-			l = "(" + l + ")";
-		}
-		if (!this.lineAlreadyExists(this.not(this.not(l)))) {
-			this.addLine(this.not(this.not(l)),"DN",referr);
-			return 1;
-		}
-		return 0;
+		//			System.out.println("adding a proof while size " + this.getProof().size());
+		Line n = new Line(s, this.proof.size(), rule, references);
+		//			System.out.println(n.getLineNumber());
+		this.proof.add(n);
 	}
-		
+	// function responsible for returning an individual line
+	public Line getLine(int index) {
+		return this.getProof().get(index);
+	}
+	// function responsible for returning the proof
+	public ArrayList<Line> getProof() {
+		return proof;
+	}
+	// getter
+	public Line getConsequent() {
+		return consequent;
+	}
+	// setter
+	public void setConsequent(Line consequent) {
+		this.consequent = consequent;
+	}
+	// returns if the line already exists in the proof
+	public boolean lineAlreadyExists(String s) {
+		for (int k = 0; k < this.getProof().size(); k++) {
+			if (this.getProof().get(k).getStatement().equals(s)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	// output string
+	public String toString() {
+		String r = "-- FORMAL PROOF --\n";
+		for (int i = 0; i < this.getProof().size(); i++) {
+			r += i + ". " + this.getProof().get(i).getFormalLine() + "\n";
+		}
+		r += "-- END OF PROOF --";
+		return r;
+	}
+	// END HELPERS
+	// ----------------------------
+
+	// ----------------------------
+	// INFERENCE RULES
 	// simplification function returns number of inserted lines
 	public int simplify(Line line) {
 		// finds the reference line to add to the proof
@@ -153,7 +172,6 @@ public class Proof {
 		}
 		return til;
 	}
-	
 	// modus ponens function returns the number of added lines based on the modus ponens rule
 	public int modusPonens(Line line) {
 		int til = 0;
@@ -181,7 +199,6 @@ public class Proof {
 		}
 		return til; // return total inserted lines
 	}
-	
 	// modus tollens function returns the number of added lines based on the modus tollens rule
 	public int modusTollens(Line line) {
 		int til = 0;
@@ -209,7 +226,7 @@ public class Proof {
 		}
 		return til; // return total inserted lines
 	}
-	
+	// biconditional exit function TODO commenting
 	public int biconditionalExit(Line line) {
 		ArrayList<String> reff = new ArrayList<String>();
 		for (int b = 0; b < this.getProof().size(); b++) {
@@ -230,7 +247,6 @@ public class Proof {
 		}
 		return til;
 	}
-
 	// DS rule function returns number of inserted lines
 	public int applyDSRule(Line line) {
 		int til = 0;
@@ -269,65 +285,57 @@ public class Proof {
 		}
 		return til;
 	}
-	
-	// returns the addition of a tilda on any statement
-	public String not(String str) {
-		return "~" + str;
-	}
-	
-	// function responsible for adding a line with rules
-	public void addLine(String s, String rule, ArrayList<String> references) {
-		// exit function if line will be a duplicate
-		for (int i = 0; i < this.getProof().size(); i++) {
-			if (this.getProof().get(i).getStatement().equals(s)) {
-				System.out.println("this line already exists!");
-				return; // exit function as to not add line
+	// END INFERENCE RULES
+	// ----------------------------
+
+	// ----------------------------	
+	// REPLACEMENT RULES
+	// reverseDoubleNegate removes two tildas from any individual line
+	public int reverseDoubleNegate(Line line) {
+		// finds the reference line to add to the proof
+		ArrayList<String> referr = new ArrayList<String>();
+		for (int a = 0; a < this.getProof().size(); a++) {
+			if (this.getProof().get(a) == line) {
+				referr.add("" + a);
 			}
 		}
-//		System.out.println("adding a proof while size " + this.getProof().size());
-		Line n = new Line(s, this.proof.size(), rule, references);
-//		System.out.println(n.getLineNumber());
-		this.proof.add(n);
-	}
-
-	// function responsible for returning an individual line
-	public Line getLine(int index) {
-		return this.getProof().get(index);
-	}
-	
-	// function responsible for returning the proof
-	public ArrayList<Line> getProof() {
-		return proof;
-	}
-
-	// getter
-	public Line getConsequent() {
-		return consequent;
-	}
-
-	// setter
-	public void setConsequent(Line consequent) {
-		this.consequent = consequent;
-	}
-	
-	// returns if the line already exists in the proof
-	public boolean lineAlreadyExists(String s) {
-		for (int k = 0; k < this.getProof().size(); k++) {
-			if (this.getProof().get(k).getStatement().equals(s)) {
-				return true;
+		String l = line.getStatement();
+		// conditional to determine whether existing parenthesis need to be chopped
+		if (l.length() > 3) {
+			// remove parenthesis also
+			if (!this.lineAlreadyExists(l.substring(3,l.length()-1))) {
+				this.addLine(l.substring(3,l.length()-1),"DN",referr);
+				return 1;
+			}
+		} else {
+			if (!this.lineAlreadyExists(l.substring(2))) {
+				this.addLine(l.substring(2),"DN",referr);
+				return 1;
 			}
 		}
-		return false;
+		return 0;
 	}
-	
-	// output string
-	public String toString() {
-		String r = "-- FORMAL PROOF --\n";
-		for (int i = 0; i < this.getProof().size(); i++) {
-			r += i + ". " + this.getProof().get(i).getFormalLine() + "\n";
+	// doubleNegate adds two tildas to any individual variable
+	public int doubleNegate(Line line) {
+		// finds the reference line to add to the proof
+		ArrayList<String> referr = new ArrayList<String>();
+		for (int a = 0; a < this.getProof().size(); a++) {
+			if (this.getProof().get(a) == line) {
+				referr.add("" + a);
+			}
 		}
-		r += "-- END OF PROOF --";
-		return r;
+		String l = line.getStatement();
+		if (line.hasOperator()) {
+			// add parenthesis
+			l = "(" + l + ")";
+		}
+		if (!this.lineAlreadyExists(this.not(this.not(l)))) {
+			this.addLine(this.not(this.not(l)),"DN",referr);
+			return 1;
+		}
+		return 0;
 	}
+	// END REPLACEMENT RULES
+	// ----------------------------
 
 }
