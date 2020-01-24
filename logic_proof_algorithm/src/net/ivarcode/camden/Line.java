@@ -107,10 +107,13 @@ public class Line {
 	}
 	
 	// function that formats the output into a formal proof
-	public String getFormalLine() {
+	public String getFormalLine(int formatMargin) {
 		String r = this.getStatement();
 		if (wasGenerated()) {
-			r += "        " + this.getRule() + " ";
+			for (int i = 0; i < (formatMargin-this.getStatement().length()); i++) {
+				r += " ";
+			}
+			r += this.getRule() + " ";
 			for (int i = 0; i < this.getReferences().size(); i++) {
 				
 //				System.out.println(this.getReferences().get(i)); //.getLineNumber()
