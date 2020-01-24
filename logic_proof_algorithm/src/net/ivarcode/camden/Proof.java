@@ -250,14 +250,16 @@ public class Proof {
 			}
 		}
 		int til = 0;
-		boolean dont_add = this.lineAlreadyExists(line.getPremise().getStatement());
+		String daNewLine = line.getPremise().getStatement() + "->" + line.getConsequent().getStatement();
+		boolean dont_add = this.lineAlreadyExists(daNewLine);
 		if (!dont_add) {
-			this.addLine(line.getPremise().getStatement(),"biconditional exit",reff);
+			this.addLine(daNewLine,"BE",reff);
 			til++;
 		}
-		dont_add = this.lineAlreadyExists(line.getConsequent().getStatement());
+		daNewLine = line.getConsequent().getStatement() + "->" + line.getPremise().getStatement();
+		dont_add = this.lineAlreadyExists(daNewLine);
 		if (!dont_add) {
-			this.addLine(line.getConsequent().getStatement(),"biconditional exit",reff);
+			this.addLine(daNewLine,"BE",reff);
 			til++;
 		}
 		return til;
@@ -350,6 +352,10 @@ public class Proof {
 		}
 		return 0;
 	}
+	// material implication P->Q == ~PvQ
+//	public int materialImplication(Line line) {
+//		
+//	}
 	// END REPLACEMENT RULES
 	// ----------------------------
 
