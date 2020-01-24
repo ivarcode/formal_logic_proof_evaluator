@@ -135,11 +135,26 @@ public class Proof {
 		}
 		return false;
 	}
+	// return longest line statement length
+	public int longestLineStatementLength() {
+		int max = 0;
+		for (int i = 0; i < this.getProof().size(); i++) {
+			if (this.getProof().get(i).getStatement().length() > max) {
+				max = this.getProof().get(i).getStatement().length();
+			}
+		}
+		return max;
+	}
 	// output string
 	public String toString() {
 		String r = "-- FORMAL PROOF --\n";
+		int formatMargin = longestLineStatementLength();
 		for (int i = 0; i < this.getProof().size(); i++) {
-			r += i + ". " + this.getProof().get(i).getFormalLine() + "\n";
+			int m = formatMargin + 6;
+			if (i > 9) {
+				m--;
+			}
+			r += i + ". " + this.getProof().get(i).getFormalLine(m) + "\n";
 		}
 		r += "-- END OF PROOF --";
 		return r;
