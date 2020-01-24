@@ -73,6 +73,21 @@ public class Line {
 						break;
 					}
 				}
+				// biconditional operator '<->'
+				if (s.charAt(i) == '<') {
+					// sets the operators, premises and consequent to the value the user inputs
+					if (counter == 0) {
+						end = i;
+						String prms = this.trimParenthesis(s.substring(start,end));
+						String op = s.substring(end,end + 3);
+						String cnsq = this.trimParenthesis(s.substring(end + 3, s.length()));
+//						System.out.println(prms + " " + op + " " + cnsq);
+						this.setPremise(new Line(prms,0));
+						this.setOperator(op);
+						this.setConsequent(new Line(cnsq,0));
+						break;
+					}
+				}
 				// ambersand '&'
 				if (s.charAt(i) == '&') {
 					if (counter == 0) {

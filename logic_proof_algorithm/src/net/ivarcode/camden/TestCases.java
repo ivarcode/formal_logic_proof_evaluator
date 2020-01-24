@@ -38,6 +38,7 @@ public class TestCases {
 		
 		
 		/// CAM ^
+		System.out.print("\n\n\n----------------------\nDISJOINTIT\n-------------------\n\n\n");
 		/// ENRICO v
 		
 		
@@ -47,8 +48,10 @@ public class TestCases {
 //		Proof tollensProof = new Proof();
 //		tollensProof.loadPremises("~B,A->B");
 //		tollensProof.setConsequent(new Line("~A", 0));
+		
+		Proof daProof = new Proof("A<->B,A");
 //		
-//		//System.out.println(proof.getLine(0));
+		System.out.println(daProof.getLine(0));
 //		//System.out.println(proof.getLine(1));
 //		
 ////		Proof pe = new Proof("A,A->B", "B");
@@ -58,13 +61,13 @@ public class TestCases {
 //		// prove recursively until exhausted options
 //		
 ////		proof.prove();
-//		int b = 1;//start
-//		while (b != 0) {
-//			b = tollensProof.prove();
-//			System.out.println("full pass :: " + b);
-//		}
-//
-//		System.out.println(tollensProof);
+		int b = 1;//start
+		while (b != 0) {
+			b = daProof.prove();
+			System.out.println("full pass :: " + b);
+		}
+
+		System.out.println(daProof);
 //		
 	}
 
